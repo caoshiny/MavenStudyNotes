@@ -1,18 +1,16 @@
 package com.shiny;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import java.sql.Timestamp;
-import java.util.Collections;
 
-public class test {
+public class Test {
     public static void main(String[] args) {
-        String json = " {\"pageSize\":50,\"startTime\":\"2022-11-01T00:00:00\",\"endTime\":\"2022-11-09T23:59:59\",\"pageNum\":1}";
-        JSONObject josn = (JSONObject) JSONObject.parse(json);
-        System.out.println(josn.getTimestamp("startTime"));
-        System.out.println(josn.getTimestamp("endTime"));
-        Timestamp startTime = josn.getTimestamp("startTime");
+        String jsonStr = " {\"pageSize\":50,\"startTime\":\"2022-11-01T00:00:00\",\"endTime\":\"2022-11-09T23:59:59\",\"pageNum\":1}";
+        JSONObject json = (JSONObject) JSONObject.parse(jsonStr);
+        System.out.println(json.getTimestamp("startTime"));
+        System.out.println(json.getTimestamp("endTime"));
+        Timestamp startTime = json.getTimestamp("startTime");
 
         Timestamp timestamp2 = Timestamp.valueOf("2022-11-12 09:59:01");
         System.out.println(timestamp2);
