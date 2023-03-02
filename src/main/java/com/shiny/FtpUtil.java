@@ -6,10 +6,6 @@ import org.apache.commons.net.ftp.FTPReply;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class FtpUtil {
     private static final String ip = "192.168.201.1";
@@ -21,7 +17,7 @@ public class FtpUtil {
 
     // 连接ftp服务器
     public boolean connectFtpServer() {
-        try{
+        try {
             ftpClient.connect(ip, port);
             ftpClient.login(username, password);
             ftpClient.setConnectTimeout(30000);
@@ -36,7 +32,7 @@ public class FtpUtil {
             ftpClient.enterLocalPassiveMode();
             ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
             return true;
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("connect ftp server error -> " + e);
             return false;
         }
@@ -47,7 +43,7 @@ public class FtpUtil {
         try {
             ftpClient.logout();
             ftpClient.disconnect();
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("disconnect ftp server error -> " + e);
         }
     }
@@ -66,7 +62,7 @@ public class FtpUtil {
             br.close();
             in.close();
             ftpClient.completePendingCommand();
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("readFile from ftp server error -> " + e);
         }
         return content.toString();
@@ -78,7 +74,7 @@ public class FtpUtil {
         try {
             ftpClient.changeWorkingDirectory("/");
             isDelFlag = ftpClient.deleteFile(fileName);
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("deleteFile from ftp server error -> " + e);
         }
         return isDelFlag;
@@ -91,7 +87,7 @@ public class FtpUtil {
             ftpClient.changeWorkingDirectory("/");
             isUploadFlag = ftpClient.storeFile(fileName, ins);
             ins.close();
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("uploadFile to ftp server error -> " + e);
         }
         return isUploadFlag;
@@ -103,14 +99,14 @@ public class FtpUtil {
         try {
             ftpClient.changeWorkingDirectory("/");
             FTPFile[] ftpFilesList = ftpClient.listFiles();
-            for(FTPFile ftpFile: ftpFilesList) {
+            for (FTPFile ftpFile : ftpFilesList) {
                 if (ftpFile.isFile()) {
-                    if(ftpFile.getName().equals(fileName)) {
+                    if (ftpFile.getName().equals(fileName)) {
                         isExist = true;
                     }
                 }
             }
-        }catch (Exception e ) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return isExist;
