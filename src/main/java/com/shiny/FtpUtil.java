@@ -1,11 +1,14 @@
 package com.shiny;
 
+import com.shiny.utils.ConvertUtil;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FtpUtil {
     private static final String ip = "192.168.201.1";
@@ -112,6 +115,36 @@ public class FtpUtil {
         return isExist;
     }
 
+    public List<AudioFile> getAllAudioFile() {
+        List<AudioFile> audioFiles = new ArrayList<>();
+        try {
+            ftpClient.changeWorkingDirectory("/");
+            FTPFile[] directories = ftpClient.listDirectories();
+
+            for (FTPFile directory: directories) {
+                String directoryName = directory.getName();
+                if (directoryName.contains("_")) {
+                    AudioFile audioFile = new AudioFile();
+                    audioFile.name = directoryName;
+                    long size = 0;
+                    ftpClient.changeWorkingDirectory("/" + directoryName);
+                    FTPFile[] audioAndVideo = ftpClient.listFiles();
+                    for (FTPFile file: audioAndVideo) {
+                        size += file.getSize();
+                        if (file.getName().endsWith(".aud")) {
+                            audioFile.duration = ConvertUtil.second2Time(file.getSize() / 384000);
+                        }
+                    }
+                    audioFile.size = ConvertUtil.getNetFileSizeDescription(size);
+                    audioFiles.add(audioFile);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return audioFiles;
+    }
+
     // 字符串转字节流
     public InputStream convertStrToIns(String target) {
         return new ByteArrayInputStream(target.getBytes(StandardCharsets.UTF_8));
@@ -122,8 +155,10 @@ public class FtpUtil {
         FtpUtil ftpUtil = new FtpUtil();
         ftpUtil.connectFtpServer();
 
-        System.out.println(ftpUtil.readFile("cmd_gain_ack"));
-        //ftpUtil.uploadFile("cmd_gain_ack", ftpUtil.convertStrToIns("78"));
+        List<AudioFile> audioFiles = ftpUtil.getAllAudioFile();
+        for (AudioFile audioFile: audioFiles) {
+            System.out.println(audioFile);
+        }
 
         ftpUtil.disconnectFtpServer();
     }
