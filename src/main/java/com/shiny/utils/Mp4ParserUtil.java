@@ -36,6 +36,6 @@ public class Mp4ParserUtil {
 
     public static void main(String[] args) throws IOException {
         Mp4ParserUtil mp4ParserUtil = new Mp4ParserUtil();
-        mp4ParserUtil.parser1("D:/test/2.h264", "D:\\test\\1.mp4");
+        mp4ParserUtil.parser1("D:/test/2.h264", "D:/test/1.mp4");
     }
 }
