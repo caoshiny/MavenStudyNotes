@@ -28,5 +28,12 @@ public class Test {
         String test = "{\"start_time\":1667232000000,\"num\":1000}";
         JSONObject testJson = (JSONObject) JSONObject.parse(test);
         System.out.println(testJson.getTimestamp("start_time"));
+
+
+    }
+
+
+    public void print(String s) {
+        System.out.println(s);
     }
 }

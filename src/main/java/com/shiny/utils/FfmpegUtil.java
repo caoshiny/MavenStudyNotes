@@ -1,49 +1,47 @@
 package com.shiny.utils;
 
-import ws.schild.jave.*;
+import ws.schild.jave.Encoder;
+import ws.schild.jave.EncoderException;
+import ws.schild.jave.MultimediaObject;
+import ws.schild.jave.encode.AudioAttributes;
+import ws.schild.jave.encode.EncodingAttributes;
 
 import java.io.File;
 import java.io.IOException;
 
 public class FfmpegUtil {
-    public static void h264ToMp4(String h264Path) throws IOException, EncoderException {
-        File file = new File(h264Path);
-        String mp4FilePath = h264Path.replace("h264", "mp4");
-        File mpFile = new File(mp4FilePath);
-        if (!mpFile.exists()) {
-            mpFile.createNewFile();
-        }
-        //获取文件多媒体类
-        MultimediaObject sourceFile = new MultimediaObject(file);
+    private static final int SAMPLING_RATE = 16000;
+    private static final int SINGLE_CHANNEL = 1;
 
-        VideoAttributes video = new VideoAttributes();
-        AudioAttributes audio = new AudioAttributes();
-        //音频编码器
-        audio.setCodec("libmp3lame");
-        //位速率又叫比特率，是指在单位时间内可以传输多少数据
-        audio.setBitRate(64000);
-        //音频的通道数，一般来说 都是单通道和双通道（立体音）
-        audio.setChannels(1);
-        //是指在数码音频和视频技术应用中，当进行模拟/数码转换时，每秒钟对模拟信号进行取样时的快慢次数
-        audio.setSamplingRate(22050);
-        //视频编码器
-        video.setCodec("libx264");
-        //位速率又叫比特率，是指在单位时间内可以传输多少数据
-        video.setBitRate(800000);
-        //画面桢速率
-        video.setFrameRate(20);
-        video.setSize(new VideoSize(1920, 1080));
-        EncodingAttributes attr = new EncodingAttributes();
-        attr.setFormat("mp4");
-        attr.setAudioAttributes(audio);
-        attr.setVideoAttributes(video);
+    /**
+     * @author: shiny
+     * @description: 音频统一转换为wav格式
+     * @param audioPath 原文件音频路径
+     * @param targetPath 目标文件夹存放路径
+     * @return 转换后的wav文件路径
+     */
+    public static String audioToWav(String audioPath, String targetPath) throws EncoderException, IOException {
+        File sourceAudioFile = new File(audioPath);
+        String wavFileName = sourceAudioFile.getName().substring(0, sourceAudioFile.getName().lastIndexOf(".")) + ".wav";
+        File wavFile = new File(targetPath + File.separator + wavFileName);
+        if (!wavFile.exists()) {
+            wavFile.createNewFile();
+        }
+
+        MultimediaObject multimediaObject = new MultimediaObject(sourceAudioFile);
+        AudioAttributes audioAttr = new AudioAttributes();
+        audioAttr.setSamplingRate(SAMPLING_RATE);
+        audioAttr.setChannels(SINGLE_CHANNEL);
+        EncodingAttributes encodingAttr = new EncodingAttributes();
+        encodingAttr.setOutputFormat("wav");
+        encodingAttr.setAudioAttributes(audioAttr);
         Encoder encoder = new Encoder();
-        encoder.encode(sourceFile, mpFile, attr);
+        encoder.encode(multimediaObject, wavFile, encodingAttr);
+
+        return wavFile.getAbsolutePath();
     }
 
-    public static void main(String[] args) throws IOException, EncoderException {
-        long startTime = System.currentTimeMillis();
-        FfmpegUtil.h264ToMp4("D:\\test\\1.h264");
-        System.out.println(System.currentTimeMillis() - startTime);
+    public static void main(String[] args) throws EncoderException, IOException {
+        FfmpegUtil.audioToWav("C:\\Users\\1S-CAOSN\\Desktop\\source\\1月.MP3", "C:\\Users\\1S-CAOSN\\Desktop\\target");
     }
 }
