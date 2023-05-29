@@ -1,4 +1,4 @@
-package com.shiny;
+package com.shiny.utils;
 
 import java.text.NumberFormat;
 

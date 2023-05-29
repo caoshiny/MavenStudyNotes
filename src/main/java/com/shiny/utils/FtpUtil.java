@@ -1,6 +1,6 @@
-package com.shiny;
+package com.shiny.utils;
 
-import com.shiny.utils.ConvertUtil;
+import com.shiny.AudioFile;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
