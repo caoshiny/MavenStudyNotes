@@ -1,4 +1,4 @@
-package com.shiny.thread;
+package com.shiny.android;
 
 public class GetAllAudioFilesThread extends Thread {
     @Override

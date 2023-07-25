@@ -1,4 +1,4 @@
-package com.shiny;
+package com.shiny.android;
 
 import java.util.ArrayList;
 import java.util.List;

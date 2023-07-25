@@ -1,6 +1,6 @@
 package com.shiny.utils;
 
-import com.shiny.AudioFile;
+import com.shiny.android.AudioFile;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
